@@ -19,29 +19,30 @@ students.pop(0)
 
 dictstudents = []
 
-for item in students:
-    student = item.split(',')
-    studentdict = {}
-    studentdict['name'] = student[0]
-    studentdict['age'] = int(student[1])
-    studentdict['id'] = student[2]
-    studentdict['classes'] = {}
-    dictstudents.append(studentdict)
-    print item
+def makeDict(students):
+    for item in students:
+        student = item.split(',')
+        studentdict = {}
+        studentdict['name'] = student[0]
+        studentdict['age'] = int(student[1])
+        studentdict['id'] = student[2]
+        studentdict['classes'] = {}
+        dictstudents.append(studentdict)
+    
         
-print dictstudents
-
-for element in dictstudents:
-    num = element['id']
-    for items in courses:
-        course = items.split(',')
-        if course[2] != num:
-            print element
-            c.insert_one(element)
-            break
-        else:
-            element['classes'][course[0]]= int(course[1])
-
-
+def inputToDB(dictstudents):
+    for element in dictstudents:
+        num = element['id']
+        for items in courses:
+            course = items.split(',')
+            if course[2] != num:
+                c.insert_one(element)
+                break
+            else:
+                element['classes'][course[0]]= int(course[1])
+                
+peep = c.find()
+for p in peep:
+    print(p)
     
 
