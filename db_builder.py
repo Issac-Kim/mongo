@@ -19,6 +19,24 @@ students.pop(0)
 
 dictstudents = []
 
+def db_build():
+    for student in students:
+        info = student.split(',')
+        student_dict = {}
+        student_dict['name'] = info[0]
+        student_dict['age'] = int(info[1])
+        student_dict['id'] = int(info[2])
+        course_info = []
+        for course in courses:
+            data = course.split(',')
+            if student_dict['id'] == int(data[2]):
+                course_dict = {}
+                course_dict['code'] = data[0]
+                course_dict['mark'] = int(data[1])
+                course_info.append(course_dict)
+        student_dict['courses'] = course_info
+        c.insert_one(student_dict)
+
 def makeDict(students):
     for item in students:
         student = item.split(',')
@@ -27,9 +45,10 @@ def makeDict(students):
         studentdict['age'] = int(student[1])
         studentdict['id'] = student[2]
         temp = []
-        for data in course:
-            if data['id'] == student[2]:
-                temp.append({'code' : data['code'], 'mark' : int(data['mark'])})
+        for data in courses:
+            if data[-1] == student[2]:
+                items = data.split(',')
+                temp.append({'code' : item[0], 'mark' : item[1]})
         studentdict['classes'] = temp
         dictstudents.append(studentdict)
     
@@ -62,8 +81,10 @@ def getAverages():
         l.append(info)
     return l
                 
-peep = c.find()
-for p in peep:
-    print(p)
+
+print(c.count())
+print(getAverages())
+
+
     
 
