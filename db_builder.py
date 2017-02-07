@@ -26,7 +26,11 @@ def makeDict(students):
         studentdict['name'] = student[0]
         studentdict['age'] = int(student[1])
         studentdict['id'] = student[2]
-        studentdict['classes'] = {}
+        temp = []
+        for data in course:
+            if data['id'] == student[2]:
+                temp.append({'code' : data['code'], 'mark' : int(data['mark'])})
+        studentdict['classes'] = temp
         dictstudents.append(studentdict)
     
         
@@ -40,6 +44,23 @@ def inputToDB(dictstudents):
                 break
             else:
                 element['classes'][course[0]]= int(course[1])
+
+def getAverages():
+    db_info = c.find()
+    l = []
+    for student in db_info:
+        info = {}
+        info['name'] = student['name']
+        info['id'] = student['id']
+        avg = 0
+        count = 0
+        for course in student['classes']:
+            avg += course['mark']
+            count += 1
+        avg = avg / count
+        info['average'] = avg
+        l.append(info)
+    return l
                 
 peep = c.find()
 for p in peep:
