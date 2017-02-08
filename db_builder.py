@@ -3,8 +3,8 @@ from pymongo import MongoClient
 students = open('peeps.csv', 'r')
 courses = open('courses.csv', 'r')
 
-server = MongoClient('149.89.150.100')
-
+#server = MongoClient('149.89.150.100')
+server = MongoClient('127.0.0.1')
 db = server['pyschic-potato']
 
 c = db['psychic-potato']['students']
@@ -37,53 +37,29 @@ def db_build():
         student_dict['courses'] = course_info
         c.insert_one(student_dict)
 
-def makeDict(students):
-    for item in students:
-        student = item.split(',')
-        studentdict = {}
-        studentdict['name'] = student[0]
-        studentdict['age'] = int(student[1])
-        studentdict['id'] = student[2]
-        temp = []
-        for data in courses:
-            if data[-1] == student[2]:
-                items = data.split(',')
-                temp.append({'code' : item[0], 'mark' : item[1]})
-        studentdict['classes'] = temp
-        dictstudents.append(studentdict)
-    
-        
-def inputToDB(dictstudents):
-    for element in dictstudents:
-        num = element['id']
-        for items in courses:
-            course = items.split(',')
-            if course[2] != num:
-                c.insert_one(element)
-                break
-            else:
-                element['classes'][course[0]]= int(course[1])
-
 def getAverages():
     db_info = c.find()
     l = []
     for student in db_info:
-        info = {}
-        info['name'] = student['name']
-        info['id'] = student['id']
+        info = []
+        info.append(student['name'])
+        info.append(student['id'])
         avg = 0
         count = 0
-        for course in student['classes']:
+        for course in student['courses']:
             avg += course['mark']
             count += 1
         avg = avg / count
-        info['average'] = avg
+        info.append(avg)
         l.append(info)
     return l
                 
+def printAverages(avgList):
+    for student in avgList:
+        studentString = student[0] + ", "  + str(student[1]) + ", " + str(student[2])
+        print(studentString)
 
-print(c.count())
-print(getAverages())
+printAverages(getAverages())
 
 
     
