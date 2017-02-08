@@ -26,7 +26,8 @@ def db_build():
                     student_data.append(student['id'])
         teacher_dict['students'] = student_data
         c.insert_one(teacher_dict)
-        
+
+db_build()
 teaches = c.find()
 for teach in teaches:
     print(teach)
