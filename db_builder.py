@@ -3,8 +3,8 @@ from pymongo import MongoClient
 students = open('peeps.csv', 'r')
 courses = open('courses.csv', 'r')
 
-#server = MongoClient('149.89.150.100')
-server = MongoClient('127.0.0.1')
+server = MongoClient('149.89.150.100')
+
 db = server['pyschic-potato']
 
 c = db['psychic-potato']['students']
@@ -16,8 +16,6 @@ courses = courses.read().split()
 courses.pop(0)
 
 students.pop(0)
-
-dictstudents = []
 
 def db_build():
     for student in students:
@@ -59,6 +57,9 @@ def printAverages(avgList):
         studentString = student[0] + ", "  + str(student[1]) + ", " + str(student[2])
         print(studentString)
 
+c.remove()
+db_build()
+print(c.count())
 printAverages(getAverages())
 
 
